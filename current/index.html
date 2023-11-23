@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        html,
+        body,
+        #maps {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+
+        #floating-panel {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            background-color: #fff;
+            padding: 15px;
+            border: #000 solid 2px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="floating-panel">
+        <input type="text" value="40.714227,-73.961452" id="latlng">
+        <input type="submit" value="Reverse Geocoder" id="submit">
+    </div>
+
+    <div id="result"></div>
+    <div id="maps"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=places&callback=initialize"
+        async defer></script>
+    <script>
+        function initialize() {
+            var map = new google.maps.Map(document.getElementById("maps"), {
+                zoom: 8,
+                center: {
+                    lat: 40.731,
+                    lng: -73.997
+                }
+            });
+
+            var geocoder = new google.maps.Geocoder();
+            var infowindow = new google.maps.InfoWindow();
+
+            geocodeLatLng(geocoder, map, infowindow);
+            document.getElementById('submit').addEventListener('click', function () {
+                geocodeLatLng(geocoder, map, infowindow);
+            });
+        }
+
+        function geocodeLatLng(geocoder, map, infowindow) {
+            var input = document.getElementById('latlng').value;
+
+            // spliting this comma
+            var latlngStr = input.split(',', input);
+
+            // latitude and longitude object
+            var latlng = {
+                lat: parseFloat(latlngStr[0]),
+                lng: parseFloat(latlngStr[1])
+            }
+
+            geocoder.geocode({ location: latlng })
+                .then(() => {
+                    console.log(response);
+                })
+                .catch();
+        }
+    </script>
+</body>
+
+</html>
